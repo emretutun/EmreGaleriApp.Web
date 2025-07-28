@@ -1,0 +1,37 @@
+﻿@model EmreGaleriApp.Repository.Models.Firm
+
+@{
+    ViewData["Title"] = "Firma Detayları";
+}
+
+<h2 class="mb-4">Firma Detayları</h2>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3 fw-semibold text-primary">Firma Adı:</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+
+            <dt class="col-sm-3 fw-semibold text-primary">Adres:</dt>
+            <dd class="col-sm-9">@Model.Address</dd>
+
+            <dt class="col-sm-3 fw-semibold text-primary">Yetkili Kişi:</dt>
+            <dd class="col-sm-9">@Model.ContactPerson</dd>
+
+            <dt class="col-sm-3 fw-semibold text-primary">Telefon:</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+
+            <dt class="col-sm-3 fw-semibold text-primary">E-posta:</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3 fw-semibold text-primary">Notlar:</dt>
+            <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Notes) ? Model.Notes : "<em>Yok</em>")</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-area="Admin" asp-controller="Firm" asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Geri
+    </a>
+</div>

@@ -1,0 +1,45 @@
+﻿@model EmreGaleriApp.Repository.Models.StockItem
+
+@{
+    ViewData["Title"] = "Stok Detayları";
+}
+
+<h2 class="text-center mb-5" style="color:#2c3e50; font-weight:700; font-size:2rem;">
+    Stok Detayları
+</h2>
+
+<div class="card mx-auto" style="max-width:600px; background:#f7f9fa; border-radius:16px; box-shadow:0 6px 16px rgba(0,0,0,0.08);">
+    <div class="card-body p-5">
+
+        <div class="mb-4">
+            <label class="fw-semibold text-secondary">Ürün Adı</label>
+            <div class="fs-5 text-dark">@Model.ProductName</div>
+        </div>
+
+        <div class="mb-4">
+            <label class="fw-semibold text-secondary">Alış Fiyatı</label>
+            <div class="fs-5 text-dark">@Model.PurchasePrice.ToString("C")</div>
+        </div>
+
+        <div class="mb-4">
+            <label class="fw-semibold text-secondary">Satış Fiyatı</label>
+            <div class="fs-5 text-dark">@Model.SalePrice.ToString("C")</div>
+        </div>
+
+        <div class="mb-4">
+            <label class="fw-semibold text-secondary">Adet</label>
+            <div class="fs-5 text-dark">@Model.Quantity</div>
+        </div>
+
+        <div class="mb-5">
+            <label class="fw-semibold text-secondary">Firma</label>
+            <div class="fs-5 text-dark">@Model.Firm?.Name</div>
+        </div>
+
+        <div class="text-end">
+            <a asp-area="Admin" asp-controller="StockItem" asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 fw-semibold">
+                Geri Dön
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+﻿@model EmreGaleriApp.Repository.Models.Car
+
+@{
+    ViewData["Title"] = "Araç Detayları";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Resim -->
+        <div class="col-md-6 mb-4">
+            <img src="@Model.ImageUrl" class="img-fluid rounded shadow" alt="@Model.Brand @Model.Model" style="max-height:400px; object-fit:cover; width:100%;" />
+        </div>
+
+        <!-- Araç Bilgileri -->
+        <div class="col-md-6">
+            <h2 class="mb-3 fw-bold">@Model.Brand @Model.Model (@Model.ModelYear)</h2>
+
+            <p class="text-muted mb-3">@Model.Description</p>
+
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item">
+                    <strong>Günlük Ücret:</strong> <span class="text-primary fs-5">@Model.DailyPrice.ToString("C")</span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Durum:</strong>
+                    @if (Model.IsAvailable)
+                    {
+                        <span class="badge bg-success">Müsait</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Kirada</span>
+                    }
+                </li>
+                <li class="list-group-item">
+                    <strong>Yakıt Tipi:</strong> @Model.FuelType
+                </li>
+                <li class="list-group-item">
+                    <strong>Renk:</strong> @Model.Color
+                </li>
+                <li class="list-group-item">
+                    <strong>Kilometre:</strong> @Model.Mileage.ToString("N0") km
+                </li>
+                <li class="list-group-item">
+                    <strong>Vites Türü:</strong>
+                    @{
+                        string? gearStr = Model.GearType.HasValue
+                        ? Model.GearType.Value.ToString().Replace("YariOtomatik", "Yarı Otomatik")
+                        : null;
+                    }
+
+                    @if (!string.IsNullOrEmpty(gearStr))
+                    {
+                        @gearStr
+                    }
+                    else
+                    {
+                        <span class="text-muted">Belirtilmemiş</span>
+                    }
+                </li>
+                <li class="list-group-item">
+                    <strong>Gereken Ehliyet:</strong>
+                    @if (Model.CarLicenseTypes != null && Model.CarLicenseTypes.Any())
+                    {
+                        <span>
+                            @string.Join(", ", Model.CarLicenseTypes.Select(clt => clt.LicenseType?.Name ?? ""))
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Belirtilmemiş</span>
+                    }
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Yorumlar Bölümü -->
+    <div class="row mt-5">
+        <div class="col-12">
+
+            @if (Model.CarReviews != null && Model.CarReviews.Any())
+            {
+                <h4>Yorumlar</h4>
+                <ul class="list-group">
+                    @foreach (var review in Model.CarReviews)
+                    {
+                        <li class="list-group-item">
+                            <strong>
+                                @(string.IsNullOrEmpty(review.User.UserName) ? "Anonim" : review.User.UserName)
+                            </strong>
+                            @* Tarih formatı *@
+                            <small class="text-muted"> - @review.CreatedDate.ToString("dd.MM.yyyy HH:mm")</small>
+                            <br />
+                            @* Yıldız veya puan gösterimi *@
+                            <span>
+                                @(new string('★', review.Rating))@(new string('☆', 5 - review.Rating))
+                            </span>
+                            <p>@review.Comment</p>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Henüz yorum yapılmamış.</p>
+            }
+        </div>
+    </div>
+</div>

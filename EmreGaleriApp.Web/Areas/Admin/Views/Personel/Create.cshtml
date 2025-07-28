@@ -1,0 +1,72 @@
+﻿@model EmreGaleriApp.Repository.Models.PersonelDetail
+
+@{
+    ViewData["Title"] = "Yeni Personel Ekle";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white d-flex align-items-center">
+            <i class="bi bi-person-plus me-2 fs-5"></i>
+            <h5 class="mb-0">Yeni Personel Ekle</h5>
+        </div>
+
+        <div class="card-body">
+            @if (ViewBag.Errors != null)
+            {
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach (var error in ViewBag.Errors)
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <form asp-action="Create" method="post" novalidate>
+                <div class="mb-3">
+                    <label asp-for="UserId" class="form-label fw-semibold">Kullanıcı</label>
+                    <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserList" required>
+                        <option value="">-- Seçiniz --</option>
+                    </select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Position" class="form-label fw-semibold">Pozisyon</label>
+                    <input asp-for="Position" class="form-control" placeholder="Örn: Şoför, Danışman" required />
+                    <span asp-validation-for="Position" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Salary" class="form-label fw-semibold">Maaş (₺)</label>
+                    <input asp-for="Salary" class="form-control" type="number" step="0.01" min="0" placeholder="Örn: 17500" required />
+                    <span asp-validation-for="Salary" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="StartDate" class="form-label fw-semibold">İşe Başlama Tarihi</label>
+                    <input asp-for="StartDate" class="form-control" type="date" required />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Geri
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-1"></i> Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

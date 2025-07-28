@@ -1,0 +1,17 @@
+﻿@model EmreGaleriApp.Web.Areas.Admin.Models.UserViewModel
+
+@{
+    ViewData["Title"] = "Kullanıcı Sil";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="alert alert-danger">
+    <strong>UYARI!</strong> "@Model.Name" adlı kullanıcıyı silmek istediğinize emin misiniz?
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Evet, Sil</button>
+    <a asp-action="UserList" asp-controller="Home" asp-area="Admin" class="btn btn-secondary">İptal</a>
+</form>

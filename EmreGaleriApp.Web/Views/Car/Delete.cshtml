@@ -1,0 +1,60 @@
+﻿@model EmreGaleriApp.Repository.Models.Car
+
+@{
+    ViewData["Title"] = "Araç Sil";
+}
+
+<h2 class="mb-4">Araç Sil</h2>
+
+<div class="card shadow-sm p-4">
+    <div class="text-center">
+        <h4 class="mb-3">@Model.Brand @Model.Model</h4>
+        <img src="@Model.ImageUrl" alt="Araç Görseli" class="img-thumbnail mb-3" style="max-height: 250px;" />
+    </div>
+
+    <dl class="row text-center">
+        <dt class="col-sm-4">Marka</dt>
+        <dd class="col-sm-8">@Model.Brand</dd>
+
+        <dt class="col-sm-4">Model</dt>
+        <dd class="col-sm-8">@Model.Model</dd>
+
+        <dt class="col-sm-4">Yıl</dt>
+        <dd class="col-sm-8">@Model.ModelYear</dd>
+
+        <dt class="col-sm-4">Günlük Ücret</dt>
+        <dd class="col-sm-8">@Model.DailyPrice ₺</dd>
+    </dl>
+
+    <div class="text-center mt-4">
+        <!-- Sil butonu, modalı açacak -->
+        <button type="button" class="btn btn-danger rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            🗑️ Sil
+        </button>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 ms-2">İptal</a>
+    </div>
+</div>
+
+<!-- Silme Onay Modalı -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow border-0">
+            <div class="modal-header bg-danger text-white rounded-top-4">
+                <h5 class="modal-title" id="deleteModalLabel">🚨 Silme Onayı</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="fs-5 mb-1"><strong>@Model.Brand @Model.Model</strong> aracını silmek üzeresiniz.</p>
+                <p class="text-muted">Bu işlem geri alınamaz. Devam etmek istiyor musunuz?</p>
+            </div>
+            <div class="modal-footer justify-content-center border-top-0 pb-4">
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-outline-danger rounded-pill px-4 me-2">Evet, Sil</button>
+                </form>
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Vazgeç</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+﻿@model List<EmreGaleriApp.Repository.Models.Order>
+
+@{
+    ViewData["Title"] = "Siparişler";
+}
+
+<h2>Siparişler</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Kullanıcı</th>
+            <th>Başlangıç Tarihi</th>
+            <th>Bitiş Tarihi</th>
+            <th>Toplam Tutar</th>
+            <th>Durum</th>
+            <th>Araçlar</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            var rowClass = order.Status == "Onaylandı" ? "table-success"
+            : order.Status == "Reddedildi" ? "table-danger"
+            : order.Status == "Tamamlandı" && order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.NotDelivered ? "table-danger"
+            : order.Status == "Tamamlandı" ? "table-info"
+            : "";
+
+            <tr class="@rowClass">
+                <td>@order.AppUser.UserName</td>
+                <td>@order.StartDate.ToShortDateString()</td>
+                <td>@order.EndDate.ToShortDateString()</td>
+                <td>@order.TotalPrice.ToString("C")</td>
+                <td><strong>@order.Status</strong></td>
+                <td>
+                    <ul>
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <li>@item.Car.Brand @item.Car.Model - @item.DailyPrice.ToString("C")/gün</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    @if (order.Status == "Beklemede")
+                    {
+                        <form asp-area="Admin" asp-controller="Order" asp-action="Approve" method="post" style="display:inline">
+                            <input type="hidden" name="id" value="@order.Id" />
+                            <button type="submit" class="btn btn-success btn-sm">Onayla</button>
+                        </form>
+
+                        <form asp-area="Admin" asp-controller="Order" asp-action="Reject" method="post" style="display:inline; margin-left:5px;">
+                            <input type="hidden" name="id" value="@order.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Reddet</button>
+                        </form>
+                    }
+                    else if (order.Status == "Onaylandı")
+                    {
+                        <span class="text-muted">İşlem yok</span>
+                    }
+                    else if (order.Status == "Tamamlandı")
+                    {
+                        if (order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.None)
+                        {
+                            <form asp-area="Admin" asp-controller="Order" asp-action="SetDeliveryStatus" method="post" style="display:inline">
+                                <input type="hidden" name="id" value="@order.Id" />
+
+                                <button type="submit" name="status" value="Delivered" class="btn btn-primary btn-sm">ARACI TESLİM ETTİ</button>
+
+                                <button type="submit" name="status" value="NotDelivered" class="btn btn-warning btn-sm" style="margin-left:5px;">ARACI TESLİM ETMEDİ</button>
+                            </form>
+                        }
+                        else
+                        {
+                            @if (order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.Delivered)
+                            {
+                                <span class="text-success">
+                                    Aracı teslim etti
+                                </span>
+                            }
+                            else if (order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.NotDelivered)
+                            {
+                                <span class="text-danger fw-bold">
+                                    Aracı teslim etmedi
+                                </span>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted">İşlem yok</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

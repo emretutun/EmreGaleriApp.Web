@@ -1,0 +1,88 @@
+﻿@model UserEditViewModel
+
+@{
+    ViewData["Title"] = "Profilimi Düzenle";
+}
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg rounded-3" style="width: 100%; max-width: 600px;">
+        <div class="card-body p-4">
+            <h2 class="card-title text-center mb-4 text-primary fw-bold">Profilimi Düzenle</h2>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+                </div>
+            }
+
+            <form asp-action="EditProfile" method="post" enctype="multipart/form-data" novalidate>
+                <div class="mb-4">
+                    <label asp-for="NationalId" class="form-label fw-semibold">TC Kimlik No</label>
+                    <input asp-for="NationalId" class="form-control form-control-lg" placeholder="TC Kimlik Numaranızı giriniz" />
+                    <span asp-validation-for="NationalId" class="text-danger fw-semibold small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Gender" class="form-label fw-semibold">Cinsiyet</label>
+                    <select asp-for="Gender" asp-items="Model.GenderOptions" class="form-select form-select-lg">
+                        <option value="">Lütfen cinsiyet seçiniz</option>
+                    </select>
+                    <span asp-validation-for="Gender" class="text-danger fw-semibold small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="BirthDate" class="form-label fw-semibold">Doğum Tarihi</label>
+                    <input asp-for="BirthDate" type="date" class="form-control form-control-lg" />
+                    <span asp-validation-for="BirthDate" class="text-danger fw-semibold small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="DrivingExperienceYears" class="form-label fw-semibold">Sürüş Deneyimi (Yıl)</label>
+                    <input asp-for="DrivingExperienceYears" type="number" min="0" class="form-control form-control-lg" placeholder="Kaç yıldır araç sürüyorsunuz?" />
+                    <span asp-validation-for="DrivingExperienceYears" class="text-danger fw-semibold small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Ehliyet Türleri</label>
+                    <div class="d-flex flex-wrap gap-3">
+                        @for (int i = 0; i < Model.LicenseTypes.Count; i++)
+                        {
+                            <div class="form-check form-check-inline">
+                                <input type="checkbox"
+                                       name="SelectedLicenseTypeIds"
+                                       class="form-check-input"
+                                       value="@Model.LicenseTypes[i].Id"
+                                @(Model.SelectedLicenseTypeIds.Contains(Model.LicenseTypes[i].Id) ? "checked" : "") />
+                                <label class="form-check-label">@Model.LicenseTypes[i].Name</label>
+                            </div>
+                        }
+                    </div>
+                    <span asp-validation-for="SelectedLicenseTypeIds" class="text-danger fw-semibold small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Picture" class="form-label fw-semibold">Profil Fotoğrafı</label>
+                    <input asp-for="Picture" type="file" class="form-control form-control-lg" accept="image/*" />
+                    <span asp-validation-for="Picture" class="text-danger fw-semibold small"></span>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.PictureUrl))
+                {
+                    <div class="mb-4 text-center">
+                        <img src="/userpictures/@Model.PictureUrl" alt="Profil Fotoğrafı" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px; object-fit: cover;" />
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm">
+                    <i class="fas fa-save me-2"></i>Kaydet
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

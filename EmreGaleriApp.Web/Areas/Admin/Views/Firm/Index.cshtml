@@ -1,0 +1,43 @@
+﻿@model IEnumerable<EmreGaleriApp.Repository.Models.Firm>
+
+@{
+    ViewData["Title"] = "Firmalar";
+}
+
+<h2>Firmalar</h2>
+
+<p>
+    <a asp-area="Admin" asp-controller="Firm" asp-action="Create" class="btn btn-primary">Yeni Firma Ekle</a>
+</p>
+
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Firma Adı</th>
+            <th>Adres</th>
+            <th>Yetkili Kişi</th>
+            <th>Telefon</th>
+            <th>E-posta</th>
+            <th style="width: 190px;">İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var firm in Model)
+        {
+            <tr>
+                <td>@firm.Name</td>
+                <td>@firm.Address</td>
+                <td>@firm.ContactPerson</td>
+                <td>@firm.Phone</td>
+                <td>@firm.Email</td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <a asp-area="Admin" asp-controller="Firm" asp-action="Details" asp-route-id="@firm.Id" class="btn btn-info btn-sm" title="Detay">Detay</a>
+                        <a asp-area="Admin" asp-controller="Firm" asp-action="Edit" asp-route-id="@firm.Id" class="btn btn-warning btn-sm" title="Düzenle">Düzenle</a>
+                        <a asp-area="Admin" asp-controller="Firm" asp-action="Delete" asp-route-id="@firm.Id" class="btn btn-danger btn-sm" title="Sil">Sil</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

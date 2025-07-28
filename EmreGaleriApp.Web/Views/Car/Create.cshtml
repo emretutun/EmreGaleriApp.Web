@@ -1,0 +1,118 @@
+﻿@model EmreGaleriApp.Core.ViewModels.CarEditViewModel
+
+@{
+    ViewData["Title"] = "Yeni Araç Ekle";
+    var fuelTypes = ViewBag.FuelTypes as List<string>;
+    var colors = ViewBag.Colors as List<string>;
+}
+
+<h2 class="mb-4 text-primary fw-bold border-bottom pb-2">Yeni Araç Ekle</h2>
+
+<form asp-area="" asp-controller="Car" asp-action="Create" enctype="multipart/form-data" method="post" class="shadow p-4 rounded bg-white">
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label asp-for="Brand" class="form-label fw-semibold">Marka</label>
+            <input asp-for="Brand" class="form-control form-control-lg" placeholder="Marka giriniz" required />
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Model" class="form-label fw-semibold">Model</label>
+            <input asp-for="Model" class="form-control form-control-lg" placeholder="Model giriniz" required />
+            <span asp-validation-for="Model" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label fw-semibold">Açıklama</label>
+        <textarea asp-for="Description" class="form-control form-control-lg" rows="3" placeholder="Araç açıklaması" required></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label asp-for="DailyPrice" class="form-label fw-semibold">Günlük Fiyat (₺)</label>
+            <input asp-for="DailyPrice" type="number" min="0" class="form-control form-control-lg" placeholder="Örnek: 500" required />
+            <span asp-validation-for="DailyPrice" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="FuelType" class="form-label fw-semibold">Yakıt Türü</label>
+            <select asp-for="FuelType" class="form-select form-select-lg" required>
+                <option value="" disabled selected>Seçiniz</option>
+                @foreach (var fuel in fuelTypes!)
+                {
+                    <option value="@fuel">@fuel</option>
+                }
+            </select>
+            <span asp-validation-for="FuelType" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Color" class="form-label fw-semibold">Renk</label>
+            <select asp-for="Color" class="form-select form-select-lg" required>
+                <option value="" disabled selected>Seçiniz</option>
+                @foreach (var color in colors!)
+                {
+                    <option value="@color">@color</option>
+                }
+            </select>
+            <span asp-validation-for="Color" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-4">
+            <label asp-for="ModelYear" class="form-label fw-semibold">Model Yılı</label>
+            <input asp-for="ModelYear" type="number" min="1900" max="2099" class="form-control form-control-lg" placeholder="Örnek: 2023" required />
+            <span asp-validation-for="ModelYear" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="Mileage" class="form-label fw-semibold">Kilometre</label>
+            <input asp-for="Mileage" type="number" min="0" class="form-control form-control-lg" placeholder="Örnek: 150000" required />
+            <span asp-validation-for="Mileage" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="GearType" class="form-label fw-semibold">Vites Türü</label>
+            <select asp-for="GearType" class="form-select form-select-lg" asp-items="ViewBag.GearTypes" required>
+                <option value="" disabled selected>Seçiniz</option>
+            </select>
+            <span asp-validation-for="GearType" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label fw-semibold">Ehliyet Türleri</label>
+        <div class="d-flex flex-wrap gap-3">
+            @for (int i = 0; i < Model.LicenseTypeList.Count; i++)
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox"
+                           name="SelectedLicenseTypeIds"
+                           value="@Model.LicenseTypeList[i].Value"
+                           id="license_@i"
+                    @(Model.LicenseTypeList[i].Selected ? "checked" : "") />
+                    <label class="form-check-label" for="license_@i">@Model.LicenseTypeList[i].Text</label>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <label for="ImageFile" class="form-label fw-semibold">Araç Görseli</label>
+        <input type="file" name="ImageFile" class="form-control form-control-lg" accept="image/*" />
+    </div>
+
+    <div class="d-flex gap-3">
+        <button type="submit" class="btn btn-success flex-fill btn-lg shadow-sm">
+            Kaydet
+        </button>
+        <a href="@Url.Action("Index", "Home", new { area = "Admin" })" class="btn btn-outline-secondary flex-fill btn-lg shadow-sm">
+            Admin Panele Geri Dön
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,97 @@
+﻿@model EmreGaleriApp.Repository.Models.AppUser
+
+@{
+    ViewData["Title"] = "Profilim";
+}
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg rounded-3" style="width: 100%; max-width: 700px;">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-4">
+                <div class="profile-image me-4">
+                    @if (!string.IsNullOrEmpty(Model.PictureUrl))
+                    {
+                        <img src="/userpictures/@Model.PictureUrl" alt="Profil Fotoğrafı"
+                             class="rounded-circle border border-3 border-primary"
+                             style="width:120px; height:120px; object-fit:cover;" />
+                    }
+                    else
+                    {
+                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center"
+                             style="width:120px; height:120px; font-size: 3rem; font-weight:bold;">
+                            @Model.UserName?.Substring(0, 1).ToUpper()
+                        </div>
+                    }
+                </div>
+                <div>
+                    <h2 class="card-title mb-1 text-primary fw-bold">@Model.UserName</h2>
+                    <small class="text-muted">@Model.Email</small>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <h6 class="text-muted small">Telefon</h6>
+                    <p class="mb-0 text-secondary">@(!string.IsNullOrWhiteSpace(Model.PhoneNumber) ? Model.PhoneNumber : "Belirtilmemiş")</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted small">TC No</h6>
+                    <p class="mb-0 text-secondary">@(!string.IsNullOrWhiteSpace(Model.NationalId) ? Model.NationalId : "Belirtilmemiş")</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted small">Ehliyet Türleri</h6>
+                    <p class="mb-0 text-secondary">
+                        @if (Model.AppUserLicenses != null && Model.AppUserLicenses.Any())
+                        {
+                            @(string.Join(", ", Model.AppUserLicenses.Select(x => x.LicenseType.Name)))
+                        }
+                        else
+                        {
+                            @:Belirtilmemiş
+                        }
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted small">Cinsiyet</h6>
+                    <p class="mb-0 text-secondary">
+                        @if (string.IsNullOrWhiteSpace(Model.Gender))
+                        {
+                            @:Belirtilmemiş
+                        }
+                        else
+                        {
+                            @(Model.Gender.ToLower() switch
+                            {
+                                "male" => "Erkek",
+                                "female" => "Kadın",
+                                _ => Model.Gender
+                            })
+                        }
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted small">Doğum Tarihi</h6>
+                    <p class="mb-0 text-secondary">@((Model.BirthDate != null) ? Model.BirthDate?.ToString("dd.MM.yyyy") : "Belirtilmemiş")</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted small">Sürüş Deneyimi (Yıl)</h6>
+                    <p class="mb-0 text-secondary">@((Model.DrivingExperienceYears != null) ? Model.DrivingExperienceYears.ToString() : "Belirtilmemiş")</p>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-controller="Member" asp-action="EditProfile" class="btn btn-primary fw-semibold px-4 py-2">
+                    Profili Düzenle
+                </a>
+
+                <form asp-action="Logout" asp-controller="Member" method="post" class="m-0">
+                    <button type="submit" class="btn btn-outline-danger fw-semibold px-4 py-2">Çıkış Yap</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

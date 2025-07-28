@@ -1,0 +1,166 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - EmreGaleriApp</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EmreGaleriApp.Web.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        body {
+            background: linear-gradient(to right, #f0f4ff, #e8f5e9);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #343a40;
+        }
+
+        nav.navbar {
+            background: white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+            padding: 0.75rem 1.5rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.7rem;
+            color: #0d6efd;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+            .navbar-brand:hover {
+                color: #0056b3;
+            }
+
+        .navbar-nav .nav-link {
+            color: #495057;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-right: 1rem;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #0d6efd;
+                text-decoration: underline;
+            }
+
+        .btn-signup {
+            background: #0d6efd;
+            color: white;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 50px;
+            transition: 0.3s ease;
+            border: none;
+        }
+
+            .btn-signup:hover {
+                background: #084298;
+            }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(13, 110, 253, 0.7)' stroke-width='2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 50px;
+        }
+    </style>
+
+    @await RenderSectionAsync("Css", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-lg">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-car-side me-2"></i>Emre Galeri
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar" aria-expanded="false" aria-label="Menüyü Aç/Kapat">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Car" asp-action="AllCars">
+                                <i class="fas fa-list me-1"></i>Tüm Araçlar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Car" asp-action="Index">
+                                <i class="fas fa-check-circle me-1"></i>Hazır Araçlar
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">
+                                <i class="fas fa-user-shield me-1"></i>Gizlilik
+                            </a>
+                        </li>
+                        <partial name="_NavbarLogin" />
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-lg mt-4">
+        <main role="main" class="pb-5">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+        © @DateTime.Now.Year Emre Galeri | Tüm hakları saklıdır.
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+    <script>
+        window.connection = new signalR.HubConnectionBuilder()
+            .withUrl("/rentalhub")
+            .build();
+
+        window.connection.start().then(() => {
+            console.log("SignalR bağlantısı kuruldu.");
+        }).catch(err => {
+            console.error(err.toString());
+        });
+
+        window.connection.on("CarLocked", function (carId) {
+            console.log("Araç kilitlendi: " + carId);
+        });
+
+        window.connection.on("CarUnlocked", function (carId) {
+            console.log("Araç kilidi açıldı: " + carId);
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

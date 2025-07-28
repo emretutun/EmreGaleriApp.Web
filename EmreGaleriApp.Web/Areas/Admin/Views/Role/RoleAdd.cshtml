@@ -1,0 +1,37 @@
+﻿@model EmreGaleriApp.Web.Areas.Admin.Models.RoleAddViewModel
+
+@{
+    ViewData["Title"] = "Rol Ekle";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Yeni Rol Ekle</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="RoleAdd" method="post" novalidate>
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label fw-semibold">Rol Adı</label>
+                        <input asp-for="Name" class="form-control form-control-lg @(ViewData.ModelState["Name"]?.Errors.Any() == true ? "is-invalid" : "")" placeholder="Rol adını girin" autocomplete="off" />
+                        <span asp-validation-for="Name" class="invalid-feedback"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-area="Admin" asp-controller="Role" asp-action="RoleList" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Geri
+                        </a>
+                        <button type="submit" class="btn btn-primary fw-semibold">
+                            <i class="bi bi-plus-lg"></i> Rol Ekle
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

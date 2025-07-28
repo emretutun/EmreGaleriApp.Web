@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Yönetici Paneli";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 mb-3">Hoş Geldiniz, <strong>@User.Identity?.Name</strong></h1>
+        <p class="lead text-muted mb-4">
+            Yönetici paneline giriş yaptınız. Buradan sistemi kolayca yönetebilirsiniz.
+        </p>
+        <p class="text-muted">Toplam kayıtlı araç sayısı: <strong>@ViewBag.TotalCars</strong></p>
+        <p class="text-muted">Toplam kayıtlı kullanıcı sayısı: <strong>@ViewBag.TotalUsers</strong></p>
+        <p class="text-muted">Kirada olan araç sayısı: <strong>@ViewBag.RentedCarsCount</strong></p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Kullanıcı Yönetimi -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Kullanıcı Yönetimi</h5>
+                    <p class="card-text flex-grow-1">Kullanıcı listesini görüntüleyin, yeni kullanıcı ekleyin ve roller atayın.</p>
+                    <a asp-area="Admin" asp-controller="Home" asp-action="UserList" class="btn btn-primary mb-2">Kullanıcı Listesi</a>
+                    <a asp-area="" asp-controller="Home" asp-action="SignUp" class="btn btn-outline-primary">Yeni Kullanıcı Ekle</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rol Yönetimi -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Rol Yönetimi</h5>
+                    <p class="card-text flex-grow-1">Kullanıcı rolleri ekleyin, düzenleyin ve atayın.</p>
+                    <a asp-area="Admin" asp-controller="Role" asp-action="RoleList" class="btn btn-primary">Rolleri Yönet</a>
+                </div>
+            </div>
+        </div>
+        <!-- Personel Yönetimi -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Personel Yönetimi</h5>
+                    <p class="card-text flex-grow-1">Sistemdeki personelleri yönetin, yeni personel kaydı oluşturun.</p>
+                    <a asp-area="Admin" asp-controller="Personel" asp-action="Index" class="btn btn-primary">Personelleri Görüntüle</a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Araç Yönetimi -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Araç Yönetimi</h5>
+                    <p class="card-text flex-grow-1">Yeni araç ekleyin ve mevcut araçları yönetin.</p>
+                    <a asp-area="" asp-controller="Car" asp-action="Create" class="btn btn-primary">Yeni Araç Ekle</a>
+                    <a asp-area="Home" asp-controller="Car" asp-action="AllCars" class="btn btn-outline-primary mt-2">Araç Listesi</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Firma Yönetimi -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Firma Yönetimi</h5>
+                    <p class="card-text flex-grow-1">Firmaları ekleyin, düzenleyin veya silin.</p>
+                    <a asp-area="Admin" asp-controller="Firm" asp-action="Index" class="btn btn-primary">Firmaları Yönet</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kasa Yönetimi -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Kasa Yönetimi</h5>
+                    <p class="card-text flex-grow-1">Kasa hareketlerini görüntüleyin, ekleyin, düzenleyin veya silin.</p>
+                    <a asp-area="Admin" asp-controller="CashRegister" asp-action="Index" class="btn btn-primary">Kasa Hareketleri</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stok Yönetimi -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Stok Yönetimi</h5>
+                    <p class="card-text flex-grow-1">Stok ürünlerini ekleyin, düzenleyin veya silin.</p>
+                    <a asp-area="Admin" asp-controller="StockItem" asp-action="Index" class="btn btn-primary">Stokları Yönet</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sipariş Yönetimi -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm mx-auto" style="max-width: 20rem;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Sipariş Yönetimi</h5>
+                    <p class="card-text flex-grow-1">Tüm siparişleri görüntüleyin, onaylayın veya reddedin.</p>
+                    <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-primary">Siparişleri Yönet</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

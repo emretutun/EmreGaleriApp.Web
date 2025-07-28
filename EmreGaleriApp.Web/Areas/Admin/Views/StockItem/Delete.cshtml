@@ -1,0 +1,40 @@
+﻿@model EmreGaleriApp.Repository.Models.StockItem
+
+@{
+    ViewData["Title"] = "Stok Silme Onayı";
+}
+
+<h2>Stok Silme Onayı</h2>
+
+<p>Bu ürünü silmek istediğinizden emin misiniz?</p>
+
+<div class="mb-3">
+    <label>Ürün Adı:</label>
+    <p>@Model.ProductName</p>
+</div>
+
+<div class="mb-3">
+    <label>Alış Fiyatı:</label>
+    <p>@Model.PurchasePrice.ToString("C")</p>
+</div>
+
+<div class="mb-3">
+    <label>Satış Fiyatı:</label>
+    <p>@Model.SalePrice.ToString("C")</p>
+</div>
+
+<div class="mb-3">
+    <label>Adet:</label>
+    <p>@Model.Quantity</p>
+</div>
+
+<div class="mb-3">
+    <label>Firma:</label>
+    <p>@Model.Firm?.Name</p>
+</div>
+
+<form asp-area="Admin" asp-controller="StockItem" asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-area="Admin" asp-controller="StockItem" asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>

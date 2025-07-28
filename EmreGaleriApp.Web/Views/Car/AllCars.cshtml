@@ -1,0 +1,150 @@
+﻿@model List<EmreGaleriApp.Repository.Models.Car>
+
+@{
+    ViewData["Title"] = "Tüm Araçlar";
+}
+
+<h2 class="text-center mb-5 fw-bold text-primary">Tüm Araçlarımız</h2>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+    @foreach (var car in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow border-0 rounded-3">
+                <div style="height:280px; overflow:hidden; border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
+                    <img src="@car.ImageUrl" alt="@car.Brand @car.Model" class="card-img-top" style="width:100%; height:100%; object-fit:cover;" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-semibold">@car.Brand @car.Model</h5>
+                    <p class="card-text text-truncate" title="@car.Description">@car.Description</p>
+                    <p class="fw-bold text-primary fs-5 mb-2">Günlük Fiyat: @car.DailyPrice.ToString("N0") ₺</p>
+                    <p class="text-muted mb-0">
+                        Durum:
+                        <span class="badge @(car.IsAvailable ? "bg-success" : "bg-danger")">
+                            @(car.IsAvailable ? "Müsait" : "Kirada")
+                        </span>
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent border-0 d-flex flex-column gap-2 pt-0">
+
+                    <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-outline-primary w-100 fw-semibold shadow-sm" style="transition: background-color 0.25s;">
+                        Araç Detayları
+                    </a>
+
+                    @if (car.IsAvailable)
+                    {
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <button class="btn btn-success w-100 fw-semibold btn-add-to-cart shadow-sm" data-car-id="@car.Id" style="transition: background-color 0.3s;">
+                                Sepete Ekle
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-success w-100 fw-semibold shadow-sm" style="transition: background-color 0.3s;" onclick="location.href='@Url.Action("SignIn", "Home")'">
+                                Sepete Ekle
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary w-100 fw-semibold shadow-sm" disabled style="opacity: 0.7; cursor: not-allowed;">
+                            Kirada
+                        </button>
+                    }
+
+                    @if (User.IsInRole("Yonetici"))
+                    {
+                        <a asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning w-100 fw-semibold shadow-sm" style="transition: background-color 0.3s;">
+                            Düzenle
+                        </a>
+                        <form asp-controller="Car" asp-action="Delete" asp-route-id="@car.Id" method="post" class="delete-form">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger w-100 fw-semibold shadow-sm" style="transition: background-color 0.3s;">
+                                Sil
+                            </button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Silme onayı
+        document.querySelectorAll('.delete-form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Silme Onayı',
+                    html: `<p>Bu aracı silmek istediğinize emin misiniz?</p>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Evet, Sil',
+                    cancelButtonText: 'İptal',
+                    customClass: {
+                        confirmButton: 'btn btn-danger rounded-pill px-4 me-2',
+                        cancelButton: 'btn btn-secondary rounded-pill px-4'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        // Sepete ekle butonları için
+        document.addEventListener("DOMContentLoaded", function () {
+            var buttons = document.querySelectorAll(".btn-add-to-cart");
+
+            buttons.forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    var carId = btn.getAttribute("data-car-id");
+
+                    fetch(`/Cart/AddToCart?id=${carId}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Başarılıysa sepete yönlendir
+                            window.location.href = "/Cart/Index";
+                        } else {
+                            // Ehliyet yetersizliği veya başka hata varsa mesajı göster
+                            if (data.errorCode === "LicenseInsufficient") {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Ehliyet Yetersiz',
+                                    text: 'Aracı kiralamak için gerekli sürücü belgesine sahip değilsiniz.'
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Hata',
+                                    text: data.message ?? 'Aracı sepete eklerken bir sorun oluştu.'
+                                });
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Hata:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hata',
+                            text: 'Sunucu ile iletişimde bir hata oluştu.'
+                        });
+                    });
+                });
+            });
+        });
+    </script>
+}

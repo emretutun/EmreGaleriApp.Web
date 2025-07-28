@@ -1,0 +1,83 @@
+﻿@model EmreGaleriApp.Web.Areas.Admin.Models.UserChangeViewModel
+
+@{
+    ViewData["Title"] = "Kullanıcı Düzenle";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-area="Admin" asp-controller="User" asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">İsim</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label">Telefon</label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NationalId" class="form-label">Kimlik Numarası</label>
+        <input asp-for="NationalId" class="form-control" />
+        <span asp-validation-for="NationalId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="BirthDate" class="form-label">Doğum Tarihi</label>
+        <input asp-for="BirthDate" type="date" class="form-control" />
+        <span asp-validation-for="BirthDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Gender" class="form-label">Cinsiyet</label>
+        <select asp-for="Gender" class="form-select">
+            <option value="">Seçiniz</option>
+            <option value="male" selected="@(Model.Gender == "male" ? "selected" : null)">Erkek</option>
+            <option value="female" selected="@(Model.Gender == "female" ? "selected" : null)">Kadın</option>
+            <option value="other" selected="@(Model.Gender == "other" ? "selected" : null)">Diğer</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DrivingExperienceYears" class="form-label">Sürüş Deneyimi</label>
+        <input asp-for="DrivingExperienceYears" type="number" min="0" class="form-control" />
+        <span asp-validation-for="DrivingExperienceYears" class="text-danger"></span>
+    </div>
+
+    <!-- Ehliyet tipleri çoklu seçim olarak -->
+    <div class="mb-3">
+        <label>Ehliyet Tipleri</label>
+        <div>
+            @for (int i = 0; i < Model.LicenseTypes.Count; i++)
+            {
+                <div class="form-check form-check-inline">
+                    <input asp-for="LicenseTypes[i].IsSelected" class="form-check-input" />
+                    <input type="hidden" asp-for="LicenseTypes[i].Id" />
+                    <input type="hidden" asp-for="LicenseTypes[i].Name" />
+                    <label class="form-check-label">@Model.LicenseTypes[i].Name</label>
+                </div>
+            }
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <a asp-area="Admin" asp-controller="Home" asp-action="UserList" class="btn btn-secondary">İptal</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

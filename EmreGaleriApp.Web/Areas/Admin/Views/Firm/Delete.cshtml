@@ -1,0 +1,30 @@
+﻿@model EmreGaleriApp.Repository.Models.Firm
+
+@{
+    ViewData["Title"] = "Firma Silme Onayı";
+}
+
+<h2>Firma Silme Onayı</h2>
+
+<p>Bu firmayı silmek istediğinizden emin misiniz?</p>
+
+<div class="mb-3">
+    <label>Firma Adı:</label>
+    <p>@Model.Name</p>
+</div>
+
+<div class="mb-3">
+    <label>Adres:</label>
+    <p>@Model.Address</p>
+</div>
+
+<div class="mb-3">
+    <label>Yetkili Kişi:</label>
+    <p>@Model.ContactPerson</p>
+</div>
+
+<form asp-area="Admin" asp-controller="Firm" asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-area="Admin" asp-controller="Firm" asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+</form>

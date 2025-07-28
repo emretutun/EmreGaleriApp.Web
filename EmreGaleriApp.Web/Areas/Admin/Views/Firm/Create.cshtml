@@ -1,0 +1,62 @@
+﻿@model EmreGaleriApp.Repository.Models.Firm
+
+@{
+    ViewData["Title"] = "Yeni Firma Ekle";
+}
+
+<h2 class="text-center mb-5" style="color:#2c3e50; font-weight:700; font-size:2rem;">
+    Yeni Firma Ekle
+</h2>
+
+<div class="mx-auto p-4" style="max-width:580px; background:#f7f9fa; border-radius:16px; box-shadow:0 8px 20px rgb(44 62 80 / 0.1);">
+    <form asp-area="Admin" asp-controller="Firm" asp-action="Create" method="post" novalidate>
+        <div class="mb-4">
+            <label asp-for="Name" class="form-label fw-semibold" style="color:#34495e;">İsim</label>
+            <input asp-for="Name" class="form-control form-control-lg rounded-3 border border-secondary-subtle" placeholder="Firma adını giriniz" style="box-shadow:none;" />
+            <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Address" class="form-label fw-semibold" style="color:#34495e;">Adres</label>
+            <input asp-for="Address" class="form-control form-control-lg rounded-3 border border-secondary-subtle" placeholder="Firma adresini giriniz" style="box-shadow:none;" />
+            <span asp-validation-for="Address" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="ContactPerson" class="form-label fw-semibold" style="color:#34495e;">Yetkili Kişi</label>
+            <input asp-for="ContactPerson" class="form-control form-control-lg rounded-3 border border-secondary-subtle" placeholder="Yetkili kişinin adı" style="box-shadow:none;" />
+            <span asp-validation-for="ContactPerson" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Phone" class="form-label fw-semibold" style="color:#34495e;">Telefon</label>
+            <input asp-for="Phone" class="form-control form-control-lg rounded-3 border border-secondary-subtle" placeholder="Telefon numarasını giriniz" style="box-shadow:none;" />
+            <span asp-validation-for="Phone" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="Email" class="form-label fw-semibold" style="color:#34495e;">E-posta</label>
+            <input asp-for="Email" class="form-control form-control-lg rounded-3 border border-secondary-subtle" placeholder="E-posta adresini giriniz" style="box-shadow:none;" />
+            <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <div class="mb-5">
+            <label asp-for="Notes" class="form-label fw-semibold" style="color:#34495e;">Notlar</label>
+            <textarea asp-for="Notes" rows="4" class="form-control form-control-lg rounded-3 border border-secondary-subtle" placeholder="Eklemek istediğiniz notlar" style="box-shadow:none;"></textarea>
+            <span asp-validation-for="Notes" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-success px-5 rounded-pill fw-semibold shadow-sm" style="background:#27ae60; border:none; transition: background-color 0.3s;">
+                Kaydet
+            </button>
+            <a asp-area="Admin" asp-controller="Firm" asp-action="Index" class="btn btn-outline-secondary px-5 rounded-pill fw-semibold shadow-sm" style="color:#34495e; border-color:#bdc3c7;">
+                İptal
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

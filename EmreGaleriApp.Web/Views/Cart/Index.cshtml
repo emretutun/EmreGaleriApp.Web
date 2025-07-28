@@ -1,0 +1,149 @@
+﻿@model List<EmreGaleriApp.Core.ViewModels.CartItem>
+
+@{
+    ViewData["Title"] = "Sepetim";
+}
+
+<h2 class="mb-4">Sepetim</h2>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <p>Sepetiniz boş.</p>
+}
+else
+{
+    <table class="table table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Araç</th>
+                <th>Günlük Fiyat (₺)</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.ImageUrl" alt="@item.CarName" style="height:60px; margin-right:10px;" />
+                        @item.CarName
+                        <input type="hidden" class="car-id" value="@item.CarId" />
+                    </td>
+                    <td>@item.DailyPrice.ToString("N2")</td>
+                    <td>
+                        <a asp-action="RemoveFromCart" asp-route-id="@item.CarId" class="btn btn-danger btn-sm">Sil</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <form id="confirmOrderForm" asp-action="ConfirmOrder" method="post" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="StartDate" class="form-label">Başlangıç Tarihi</label>
+                <input type="date" id="StartDate" name="StartDate" class="form-control" required />
+            </div>
+            <div class="col-md-4">
+                <label for="EndDate" class="form-label">Bitiş Tarihi</label>
+                <input type="date" id="EndDate" name="EndDate" class="form-control" required />
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-success w-100">Siparişi Onayla</button>
+            </div>
+        </div>
+
+        <div id="customAlertContainer"></div>
+    </form>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('StartDate').setAttribute('min', today);
+            document.getElementById('EndDate').setAttribute('min', today);
+        });
+
+        function showAlert(message) {
+            const container = document.getElementById('customAlertContainer');
+            container.innerHTML = `
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" aria-label="Close"></button>
+                    <button type="button" class="btn btn-primary btn-sm ms-3" id="alertOkBtn">Tamam</button>
+                </div>
+            `;
+
+            const alertElem = container.querySelector('.alert');
+            const closeBtn = container.querySelector('.btn-close');
+            const okBtn = document.getElementById('alertOkBtn');
+
+            closeBtn.addEventListener('click', () => {
+                alertElem.classList.remove('show');
+                alertElem.classList.add('hide');
+                container.innerHTML = '';
+            });
+
+            okBtn.addEventListener('click', () => {
+                alertElem.classList.remove('show');
+                alertElem.classList.add('hide');
+                container.innerHTML = '';
+            });
+        }
+
+        document.getElementById("confirmOrderForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            let carIds = [];
+            document.querySelectorAll('.car-id').forEach(input => {
+                carIds.push(parseInt(input.value));
+            });
+
+            if (carIds.length === 0) {
+                showAlert("Sepetinizde araç yok.");
+                return;
+            }
+
+            const startDateInput = document.getElementById('StartDate');
+            const endDateInput = document.getElementById('EndDate');
+
+            if (!startDateInput.value || !endDateInput.value) {
+                showAlert("Lütfen tarihleri eksiksiz doldurun.");
+                return;
+            }
+
+            if (new Date(startDateInput.value) > new Date(endDateInput.value)) {
+                showAlert("Başlangıç tarihi, bitiş tarihinden sonra olamaz.");
+                return;
+            }
+
+            for (let i = 0; i < carIds.length; i++) {
+                let carId = carIds[i];
+                let available = false;
+                try {
+                    available = await window.connection.invoke("CheckIfCarAvailable", carId);
+                } catch (err) {
+                    console.error(err.toString());
+                    showAlert("Sunucuya bağlanırken hata oluştu.");
+                    return;
+                }
+
+                if (!available) {
+                    showAlert("Üzgünüz araç şu anda başkası tarafından kiralandı.");
+                    return;
+                }
+            }
+
+            // Her şey tamam, formu gönderiyoruz
+            this.submit();
+        });
+    </script>
+}

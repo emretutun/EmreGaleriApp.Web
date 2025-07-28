@@ -1,0 +1,92 @@
+﻿@model List<EmreGaleriApp.Repository.Models.Order>
+
+@{
+    var reviewedKeys = ViewBag.ReviewedKeys as List<dynamic> ?? new List<dynamic>();
+}
+
+@if (TempData["ReviewError"] != null)
+{
+    <div class="alert alert-warning shadow-sm">
+        @TempData["ReviewError"]
+    </div>
+}
+
+<h2 class="mb-4 text-primary fw-bold">Siparişlerim</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center py-4 shadow-sm" role="alert" style="font-size:1.1rem;">
+        Henüz siparişiniz yok.
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @foreach (var order in Model)
+        {
+            <div class="col">
+                <div class="card shadow-sm h-100 border-0 rounded-3 hover-shadow">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <strong>Sipariş #@order.Id</strong>
+                        <span class="badge
+                            @(order.Status == "Beklemede" ? "bg-warning text-dark" :
+                              order.Status == "Onaylandı" ? "bg-success" :
+                              order.Status == "Reddedildi" ? "bg-danger" : "bg-secondary")
+                            rounded-pill px-3 py-1 fs-6">
+                            @order.Status
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Başlangıç Tarihi:</strong> @order.StartDate.ToShortDateString()</p>
+                        <p><strong>Bitiş Tarihi:</strong> @order.EndDate.ToShortDateString()</p>
+                        <p><strong>Toplam Tutar:</strong> <span class="fs-5 text-success">@order.TotalPrice.ToString("C")</span></p>
+
+                        <h6 class="mt-4 mb-3">Araçlar</h6>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var item in order.OrderItems)
+                            {
+                                var hasReviewed = reviewedKeys.Any(r => r.OrderId == order.Id && r.CarId == item.CarId);
+
+                                <li class="list-group-item d-flex align-items-center justify-content-between gap-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="@item.Car.ImageUrl" alt="@item.Car.Brand @item.Car.Model"
+                                             style="width: 70px; height: 45px; object-fit: cover; border-radius: 8px; border: 1px solid #ddd;" />
+                                        <div>
+                                            <div class="fw-semibold fs-6">@item.Car.Brand @item.Car.Model</div>
+                                            <small class="text-muted">@item.DailyPrice.ToString("C") / gün</small>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        @if (order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.Delivered)
+                                        {
+                                            if (hasReviewed)
+                                            {
+                                                <button class="btn btn-outline-secondary btn-sm" disabled>
+                                                    <i class="fas fa-check-circle me-1"></i>Yorum Yapıldı
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Order" asp-action="AddReview" asp-route-orderId="@order.Id" asp-route-carId="@item.CarId" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-comment-dots me-1"></i>Yorum Yap
+                                                </a>
+                                            }
+                                        }
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<style>
+    .hover-shadow:hover {
+        box-shadow: 0 0.5rem 1rem rgba(13, 110, 253, 0.15);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+</style>

@@ -1,0 +1,24 @@
+﻿@model EmreGaleriApp.Repository.Models.CashRegister
+
+@{
+    ViewData["Title"] = "Kasa Hareketi Sil";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="alert alert-warning">
+    <p>Bu kasa hareketini silmek istediğinize emin misiniz?</p>
+</div>
+
+<table class="table table-bordered">
+    <tr><th>Tarih</th><td>@Model.CreatedAt</td></tr>
+    <tr><th>Tutar</th><td>@Model.Amount</td></tr>
+    <tr><th>Tip</th><td>@Model.Type</td></tr>
+    <tr><th>Açıklama</th><td>@Model.Description</td></tr>
+</table>
+
+<form asp-area="Admin" asp-controller="CashRegister" asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-area="Admin" asp-controller="CashRegister" asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>

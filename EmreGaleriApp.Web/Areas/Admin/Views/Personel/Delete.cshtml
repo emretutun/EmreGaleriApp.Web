@@ -1,0 +1,15 @@
+﻿@model EmreGaleriApp.Repository.Models.PersonelDetail
+
+<h2>Personel Sil</h2>
+
+<div class="alert alert-warning">
+    <p>
+        <strong>@Model.User?.UserName</strong> - <em>@Model.Position</em> kaydını silmek istediğinize emin misiniz?
+    </p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>

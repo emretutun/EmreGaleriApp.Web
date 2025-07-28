@@ -1,0 +1,36 @@
+﻿@model EmreGaleriApp.Web.Areas.Admin.Models.ReminderViewModel
+
+@{
+    ViewData["Title"] = "Yeni Not Ekle";
+}
+
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4">🆕 Yeni Not Ekle</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Başlık</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Açıklama</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ReminderDate" class="form-label">Tarih</label>
+            <input asp-for="ReminderDate" class="form-control" type="datetime-local" />
+            <span asp-validation-for="ReminderDate" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success">Kaydet</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

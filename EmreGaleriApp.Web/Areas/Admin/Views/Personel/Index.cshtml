@@ -1,0 +1,85 @@
+﻿@model List<EmreGaleriApp.Repository.Models.PersonelDetail>
+
+@{
+    ViewData["Title"] = "Personel Listesi";
+}
+<!-- Bootstrap CSS & Ikonlar -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<div class="mb-3">
+    <a asp-area="Admin" asp-controller="Personel" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-person-plus"></i> Yeni Personel Ekle
+    </a>
+</div>
+
+<table class="table table-bordered table-striped table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Kullanıcı</th>
+            <th>Pozisyon</th>
+            <th>Maaş</th>
+            <th>Başlangıç Tarihi</th>
+            <th class="text-center">İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(item.User?.UserName ?? "Bilinmiyor")</td>
+                <td>@item.Position</td>
+                <td>@item.Salary.ToString("C")</td>
+                <td>@item.StartDate.ToShortDateString()</td>
+                <td class="text-center">
+                    <a asp-area="Admin" asp-controller="Personel" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm me-1" title="Detay">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a asp-area="Admin" asp-controller="Personel" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1" title="Düzenle">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a asp-area="Admin" asp-controller="Personel" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm me-1" title="Sil">
+                        <i class="bi bi-trash"></i>
+                    </a>
+
+                    <!-- Maaş Öde Butonu (Modal Tetikleyici) -->
+                    <button class="btn btn-success btn-sm" title="Maaş Öde"
+                            data-bs-toggle="modal"
+                            data-bs-target="#paySalaryModal_@item.Id">
+                        <i class="bi bi-currency-dollar"></i>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="paySalaryModal_@item.Id" tabindex="-1" aria-labelledby="paySalaryModalLabel_@item.Id" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content border-success">
+                                <div class="modal-header bg-success text-white">
+                                    <h5 class="modal-title" id="paySalaryModalLabel_@item.Id">Maaş Ödemesi Onayı</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>@(item.User?.UserName ?? "Bilinmiyor")</strong> kullanıcısına  maaş ödemesi yapmak istediğinize emin misiniz?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <form asp-area="Admin" asp-controller="Personel" asp-action="PaySalary" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <input type="hidden" name="monthCount" value="1" />
+                                        <button type="submit" class="btn btn-success">Evet, Öde</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

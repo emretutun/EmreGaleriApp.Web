@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-white bg-primary px-3 py-2 rounded-pill"
+           href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle"></i> @User.Identity.Name
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm animate__animated animate__fadeIn">
+            @* Yönetici veya Yetkili rolündeyse Admin Panel linki *@
+            @if (User.IsInRole("Yonetici") || User.IsInRole("Yetkili"))
+            {
+                <li>
+                    <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                        <i class="fas fa-tools me-2 text-primary"></i>Admin Panel
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+            }
+
+            <li>
+                <a class="dropdown-item" asp-controller="Member" asp-action="Profile">
+                    <i class="fas fa-user me-2 text-info"></i>Profilim
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-controller="Cart" asp-action="Index">
+                    <i class="fas fa-shopping-cart me-2 text-warning"></i>Sepetim
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-controller="Order" asp-action="MyOrders">
+                    <i class="fas fa-box-open me-2 text-success"></i>Siparişlerim
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-controller="Member" asp-action="ChangePassword">
+                    <i class="fas fa-key me-2 text-secondary"></i>Şifre Değiştir
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-controller="Member" asp-action="EditProfile">
+                    <i class="fas fa-edit me-2 text-dark"></i>Profili Düzenle
+                </a>
+            </li>
+
+            <li><hr class="dropdown-divider" /></li>
+
+            <li>
+                <form asp-controller="Member" asp-action="Logout" method="post" class="dropdown-item m-0 p-0">
+                    <button type="submit" class="btn text-danger w-100 text-start px-3 py-2">
+                        <i class="fas fa-sign-out-alt me-2"></i>Çıkış Yap
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item d-flex gap-2">
+        <a class="btn btn-outline-primary px-3" asp-controller="Home" asp-action="SignUp">
+            <i class="fas fa-user-plus me-1"></i>Üye Ol
+        </a>
+        <a class="btn btn-primary px-3 text-white" asp-controller="Home" asp-action="SignIn">
+            <i class="fas fa-sign-in-alt me-1"></i>Giriş Yap
+        </a>
+    </li>
+}

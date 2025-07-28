@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Anasayfa";
+}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .hero-bg {
+        background-image: url('/images/cover.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        z-index: 1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        color: white;
+        text-align: center;
+        padding: 3rem 2rem;
+        max-width: 800px;
+    }
+
+        .hero-content h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-content p {
+            font-size: 1.4rem;
+            margin-top: 1rem;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-content a.btn {
+            margin-top: 2rem;
+            padding: 0.9rem 2.2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            background-color: #ffc107;
+            color: #000;
+            border: none;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+            .hero-content a.btn:hover {
+                background-color: #e0a800;
+                color: #fff;
+                transform: scale(1.05);
+            }
+
+    @@media (max-width: 768px) {
+        .hero-content h1
+
+    {
+        font-size: 2.2rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    }
+</style>
+
+<div class="hero-bg">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>Emre Galeri'ye Hoş Geldiniz!</h1>
+        <p>Geniş araç filomuzla, yola çıkmak hiç bu kadar kolay olmamıştı.</p>
+        <a asp-controller="Car" asp-action="AllCars" class="btn">
+            🚗 Tüm Araçları Görüntüle
+        </a>
+    </div>
+</div>
