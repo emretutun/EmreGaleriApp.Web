@@ -1,5 +1,5 @@
 ﻿using EmreGaleriApp.Repository.Models;
-using EmreGaleriApp.Core.Models;
+using EmreGaleriApp.Core.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

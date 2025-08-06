@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmreGaleriApp.Core.Models
+namespace EmreGaleriApp.Core.Enums
 {
     public enum GearType
     {

@@ -1,4 +1,5 @@
-﻿using EmreGaleriApp.Repository.Models;
+﻿using EmreGaleriApp.Core.Enums;
+using EmreGaleriApp.Repository.Models;
 using EmreGaleriApp.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

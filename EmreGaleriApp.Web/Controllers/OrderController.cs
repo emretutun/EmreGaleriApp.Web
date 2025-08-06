@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using EmreGaleriApp.Core.ViewModels;
 using EmreGaleriApp.Service.Services;
+using EmreGaleriApp.Core.Enums;
 
 namespace EmreGaleriApp.Web.Controllers
 {

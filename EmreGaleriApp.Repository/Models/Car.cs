@@ -1,4 +1,4 @@
-﻿using EmreGaleriApp.Core.Models;
+﻿using EmreGaleriApp.Core.Enums;
 
 namespace EmreGaleriApp.Repository.Models
 {

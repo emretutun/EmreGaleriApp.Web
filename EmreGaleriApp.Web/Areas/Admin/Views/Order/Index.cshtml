@@ -1,5 +1,7 @@
 ﻿@model List<EmreGaleriApp.Repository.Models.Order>
 
+@using EmreGaleriApp.Core.Enums
+
 @{
     ViewData["Title"] = "Siparişler";
 }
@@ -23,7 +25,7 @@
         {
             var rowClass = order.Status == "Onaylandı" ? "table-success"
             : order.Status == "Reddedildi" ? "table-danger"
-            : order.Status == "Tamamlandı" && order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.NotDelivered ? "table-danger"
+            : order.Status == "Tamamlandı" && order.DeliveryStatus == DeliveryStatus.NotDelivered ? "table-danger"
             : order.Status == "Tamamlandı" ? "table-info"
             : "";
 
@@ -60,7 +62,7 @@
                     }
                     else if (order.Status == "Tamamlandı")
                     {
-                        if (order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.None)
+                        if (order.DeliveryStatus == DeliveryStatus.None)
                         {
                             <form asp-area="Admin" asp-controller="Order" asp-action="SetDeliveryStatus" method="post" style="display:inline">
                                 <input type="hidden" name="id" value="@order.Id" />
@@ -72,13 +74,13 @@
                         }
                         else
                         {
-                            @if (order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.Delivered)
+                            @if (order.DeliveryStatus == DeliveryStatus.Delivered)
                             {
                                 <span class="text-success">
                                     Aracı teslim etti
                                 </span>
                             }
-                            else if (order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.NotDelivered)
+                            else if (order.DeliveryStatus == DeliveryStatus.NotDelivered)
                             {
                                 <span class="text-danger fw-bold">
                                     Aracı teslim etmedi

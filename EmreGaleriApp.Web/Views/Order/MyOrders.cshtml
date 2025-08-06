@@ -1,5 +1,7 @@
 ﻿@model List<EmreGaleriApp.Repository.Models.Order>
 
+@using EmreGaleriApp.Core.Enums
+
 @{
     var reviewedKeys = ViewBag.ReviewedKeys as List<dynamic> ?? new List<dynamic>();
 }
@@ -58,7 +60,7 @@ else
                                     </div>
 
                                     <div>
-                                        @if (order.DeliveryStatus == EmreGaleriApp.Repository.Models.DeliveryStatus.Delivered)
+                                        @if (order.DeliveryStatus == DeliveryStatus.Delivered)
                                         {
                                             if (hasReviewed)
                                             {

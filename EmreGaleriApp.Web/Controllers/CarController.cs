@@ -11,7 +11,7 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using EmreGaleriApp.Core.Models;
+using EmreGaleriApp.Core.Enums;
 using System.Security.Claims;
 
 

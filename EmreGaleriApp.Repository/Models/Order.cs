@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmreGaleriApp.Core.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace EmreGaleriApp.Repository.Models
@@ -18,13 +19,7 @@ namespace EmreGaleriApp.Repository.Models
         public DeliveryStatus DeliveryStatus { get; set; } = DeliveryStatus.None;
 
 
-
     }
 
-    public enum DeliveryStatus
-    {
-        None = 0,
-        Delivered = 1,
-        NotDelivered = 2
-    }
+
 }

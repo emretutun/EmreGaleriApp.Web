@@ -67,7 +67,7 @@
 
     <div class="mb-3">
         <label asp-for="GearType" class="form-label">Vites Türü</label>
-        <select asp-for="GearType" class="form-select" asp-items="Html.GetEnumSelectList<EmreGaleriApp.Core.Models.GearType>()">
+        <select asp-for="GearType" class="form-select" asp-items="Html.GetEnumSelectList<EmreGaleriApp.Core.Enums.GearType>()">
             <option value="">Seçiniz</option>
         </select>
         <span asp-validation-for="GearType" class="text-danger"></span>

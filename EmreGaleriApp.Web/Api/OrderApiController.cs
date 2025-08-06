@@ -9,6 +9,7 @@ using System.Linq;
 using System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using EmreGaleriApp.Web.Services;
+using EmreGaleriApp.Core.Enums;
 
 namespace EmreGaleriApp.Web.Api
 {
